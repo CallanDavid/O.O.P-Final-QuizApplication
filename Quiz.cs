@@ -15,5 +15,10 @@ namespace MyQuizApp
             this.questions = questions;
         }
 
+        public void DisplayQuestion(Question question)
+        {
+            Console.WriteLine(question.QuestionText);
+        }
+
     }
 }
