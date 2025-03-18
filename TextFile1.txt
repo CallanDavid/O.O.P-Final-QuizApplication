@@ -1,2 +1,4 @@
 ﻿The 'this' keyword in C# refers to the current instance ofthe class it is use in.
 It is used to access members (like properties and methods) of the same object.
+
+Console.Write simply writes the text without going into the next line
