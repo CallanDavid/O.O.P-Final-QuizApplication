@@ -33,6 +33,29 @@ namespace MyQuizApp
                 Console.ResetColor();   // reset the foreground (text) color
                 Console.WriteLine($". {question.Answers[i]}");
             }
+
+            if (GetUserChoice() == question.CorrectAnswerIndex)
+            {
+                Console.WriteLine("Correct");
+            }else
+            {
+                Console.WriteLine("Incorrect");
+            }
+
+        }
+
+        private int GetUserChoice()
+        {
+            Console.Write("Your answer (number): ");
+            string input = Console.ReadLine();
+            int choice = 0;
+            while (!int.TryParse(input, out choice) || choice < 1 || choice > 4)
+            {
+                Console.WriteLine("Invalid option selected. Please enter a number between 1 and 4: ");
+                input = Console.ReadLine();
+            }
+            return choice - 1;  // adjust to 0-indexed array because the user sees 1-4
+
         }
 
     }
