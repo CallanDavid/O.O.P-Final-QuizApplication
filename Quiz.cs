@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,41 +9,87 @@ namespace MyQuizApp
 {
     internal class Quiz
     {
-        private Question[] questions;
+        private Question[] _questions;
+        private int _score;
 
         public Quiz(Question[] questions)
         {
-            this.questions = questions;
+            this._questions = questions;
+            _score = 0;
         }
 
-        public void DisplayQuestion(Question question)
+        public void StartQuiz()
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Welcome to the quiz");
+            int questionNumber = 1; // display queston numbers
+
+            foreach (Question question in _questions)
+            {
+                Console.WriteLine($"Question {questionNumber++}:");
+                DisplayQuestion(question);
+                int userChoice = GetUserChoice();
+                if (question.IsCorrectAnswer(userChoice))
+                {
+                    Console.WriteLine("Correct");
+                    _score++;
+                }
+                else
+                {
+                    Console.WriteLine($"Incorrect! The correct answer was {question.Answers[question.CorrectAnswerIndex]}");
+                }
+            }
+            DisplayResults();
+        }
+
+        private void DisplayResults()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("╔═════════════════════════════════════════════════════════════════════════╗");
-            Console.WriteLine("║                              Question 1                                 ║");
+            Console.WriteLine("║                                 Results                                 ║");
             Console.WriteLine("╚═════════════════════════════════════════════════════════════════════════╝");
             Console.ResetColor();
 
+            Console.WriteLine($"Quiz Complete. Your Score: {_score} out of {_questions.Length}");
+            double percentage = (double)_score / _questions.Length;
+            if (percentage >= 0.8)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Excellent work you passed");
+            }
+            else if (percentage >= 0.5)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Good effort");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("You failed");
+            } 
+            Console.ResetColor();
+        }
+
+        private void DisplayQuestion(Question question)
+                {
+            Thread.Sleep(1000); // wait for 1 second
+
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("╔═════════════════════════════════════════════════════════════════════════╗");
+                    Console.WriteLine("║                              Question                                   ║");
+                    Console.WriteLine("╚═════════════════════════════════════════════════════════════════════════╝");
+                    Console.ResetColor();
+
             Console.WriteLine(question.QuestionText);
 
-            for (int i = 0; i < question.Answers.Length; i++)
-            {
-                Console.ForegroundColor = ConsoleColor.Cyan; // changes the text color
-                Console.Write("   ");
-                Console.Write(i + 1);
-                Console.ResetColor();   // reset the foreground (text) color
-                Console.WriteLine($". {question.Answers[i]}");
-            }
-
-            if (GetUserChoice() == question.CorrectAnswerIndex)
-            {
-                Console.WriteLine("Correct");
-            }else
-            {
-                Console.WriteLine("Incorrect");
-            }
-
-        }
+                    for (int i = 0; i < question.Answers.Length; i++)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan; // changes the text color
+                        Console.Write("   ");
+                        Console.Write(i + 1);
+                        Console.ResetColor();   // reset the foreground (text) color
+                        Console.WriteLine($". {question.Answers[i]}");
+                    }
+                }
 
         private int GetUserChoice()
         {
